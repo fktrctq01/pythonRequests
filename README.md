@@ -1,6 +1,6 @@
 ## 🏁 Get started
 
-- Install Python version 3.9.13
+- Install python version 3.9.13 or +
 - Install pytest framework
 ```
 $ pip install pytest
@@ -12,4 +12,6 @@ $ pip install requests
 ```
 
 ## 🚀 For run autotests:
-TODO
+```
+$ pytest tests.py
+```
