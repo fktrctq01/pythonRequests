@@ -1,0 +1,28 @@
+import json
+
+from jsonschema import validate
+from src.enums.global_enums import GlobalErrorMessages
+
+
+class OrderValidator:
+
+    def __init__(self, response):
+        self.response = response
+        self.response_body = response.json()
+        self.response_status = response.status_code
+        self.headers = response.headers
+
+    def validate_body(self, schema):
+        validate(self.response_body, schema)
+        return self
+
+    def validate_status_code(self, status_code):
+        assert self.response_status == status_code, GlobalErrorMessages.WRONG_STATUS_CODE.value
+        return self
+
+    def __str__(self):
+        return f"""
+        Status code: {self.response_status}. 
+        Response body: {json.dumps(self.response_body, indent = 0)}
+        Headers: {self.headers}.
+        """
