@@ -1,7 +1,7 @@
 from typing import Final
 
 
-URL: Final[str] = 'https://petstore.swagger.io/v2'
+URL: Final[str] = 'http://127.0.0.1:5000/mock'
 ENDPOINTS_CREATE: Final[str] = '/api/order/create'
 ENDPOINTS_CLEAN: Final[str] = '/api/order/clean'
 ENDPOINTS_MARKETDATA: Final[str] = '/api/order/marketdata'

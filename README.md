@@ -11,12 +11,18 @@ $ pip3 install pytest
 $ pip3 install requests
 $ pip3 install jsonschema
 $ pip3 install pydantic
+$ pip3 install Flask
+$ pip3 install flask-restplus
 
 ```
 - Install allure framework
 ```
 $ brew install allure
 $ pip3 install allure-pytest
+```
+## 💡 For run mock:
+```
+$ python3 mock/run.py
 ```
 
 ## 🚀 For run autotests:

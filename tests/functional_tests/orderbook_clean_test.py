@@ -20,12 +20,13 @@ def test_check_clean_order_book(create_order):
     """
     Проверка очистки стакана запросом /api/order/clean
     """
-
-    response = sender.get_marked_data()
-    market_data = MarketData(response.json())
-    print()
-    print(market_data)
-    print(response.json())
+    market_data = MarketData(sender.get_marked_data().json())
+    if len(market_data.asks) + len(market_data.bids) > 2:
+        print("+++++++")
+    # print(response.json())
+    # print()
+    # print(market_data)
+    # print(response.json())
     # if market_data.
 
     # response = sender.clean()
