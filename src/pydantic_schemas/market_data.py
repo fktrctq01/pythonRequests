@@ -8,12 +8,6 @@ class MarketDataOrder(BaseModel):
     price: StrictStr
     quantity: StrictStr
 
-    # @validator("price", "quantity")
-    # def check_type_of_price(cls, v):
-    #     if not v.isdigit():
-    #         raise ValueError("price must be digits")
-    #     return v
-
     @validator("price", "quantity")
     def check_length_price(cls, v):
         reg_exs = r"^\d{1,4}$"

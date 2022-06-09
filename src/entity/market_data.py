@@ -4,17 +4,9 @@ from src.entity.market_data_order import MarketDataOrder
 class MarketData:
 
     def __init__(self, json):
-        self.result = {}
-
-        self.asks = list()
-        for element in json.get('asks'):
-            self.asks.append(MarketDataOrder(element))
-        self.result['asks'] = self.asks
-
-        self.bids = list()
-        for element in json.get('bids'):
-            self.bids.append(MarketDataOrder(element))
-        self.result['bids'] = self.bids
+        self.result = {'asks': list(), 'bids': list()}
+        self.result['asks'].extend(MarketDataOrder(element) for element in json.get('asks'))
+        self.result['bids'].extend(MarketDataOrder(element) for element in json.get('bids'))
 
     def build(self):
         return self.result
