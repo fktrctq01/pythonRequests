@@ -2,21 +2,20 @@
 # @Author : Alexey Khmarskiy
 # @File   : create_order_test.py
 
-import allure
-import pytest
-
 from src.entity.order import Order
 from src.request import sender
 from src.response.validator.order_validator import OrderValidator
 from src.json_schemas.order import ORDER_SCHEMA
 from src.enums.order_type import OrderType
+from allure import feature, story, title, severity, step
+from pytest import mark
 
 
-@allure.feature("Тестирование работы сервиса биржевого стакана")
-@allure.story("Тестирование запроса создания заявки")
-@allure.title("Валидация кода и тела ответа на запрос создания заказа с параметрами")
-@allure.severity('critical')
-@pytest.mark.parametrize("id,price,quantity,side", [
+@feature("Тестирование работы сервиса биржевого стакана")
+@story("Тестирование запроса создания заявки")
+@title("Валидация кода и тела ответа на запрос создания заказа с параметрами")
+@severity('critical')
+@mark.parametrize("id,price,quantity,side", [
     (1, 100, 10, OrderType.SELL),
     (2, 200, 20, OrderType.BUY)
 ])
@@ -31,5 +30,4 @@ def test_check_response_body_clean_order_book(id, price, quantity, side):
         .validate_price(price)\
         .validate_quantity(quantity)\
         .validate_side(side)
-
 

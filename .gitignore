@@ -1,5 +1,7 @@
 .idea
 tests/.pytest_cache
 .pytest_cache
-allure_result
-tests_example
+allure-results
+tests/functional_tests/allure-results
+allure-report
+tests/functional_tests/allure-report

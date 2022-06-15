@@ -27,12 +27,14 @@ $ python3 mock/run.py
 
 ## 🚀 For run autotests:
 ```
-$  pytest -s -v tests/{file_name}.py --alluredir=allure_result
+$  pytest -s -v tests/{file_name}.py --alluredir=allure-results
 or
-$  pytest -s -v tests --alluredir=allure_result
+$  pytest -s -v tests --alluredir=allure-results
 ```
 
 ## 📊 For create report:
 ```
-$ allure serve allure_result/
+$ allure serve allure-results
+or
+$ allure generate --clean --output allure-report
 ```
