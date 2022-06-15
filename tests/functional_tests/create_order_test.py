@@ -30,4 +30,3 @@ def test_check_response_body_clean_order_book(id, price, quantity, side):
         .validate_price(price)\
         .validate_quantity(quantity)\
         .validate_side(side)
-

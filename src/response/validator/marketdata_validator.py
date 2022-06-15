@@ -16,6 +16,14 @@ class MarketDataValidator(MainValidator):
         assert len(self.response_body["bids"]) == count, GlobalErrorMessages.WRONG_COUNT_ORDER_IN_RESPONSE.value
         return self
 
+    def check_asks_is_not_empty(self):
+        assert len(self.response_body["asks"]) > 0, GlobalErrorMessages.EMPTY_ORDERBOOK.value
+        return self
+
+    def check_bids_is_not_empty(self):
+        assert len(self.response_body["bids"]) > 0, GlobalErrorMessages.EMPTY_ORDERBOOK.value
+        return self
+
     def check_availability_of_ask(self, price, quantity):
         asks = dict((order.get("price"), order.get("quantity")) for order in self.response_body["asks"])
         assert True if asks.get(price) == quantity else False, GlobalErrorMessages.WRONG_VALUE_ORDER_IN_RESPONSE.value

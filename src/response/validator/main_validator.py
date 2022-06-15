@@ -8,7 +8,7 @@ class MainValidator:
 
     def __init__(self, response):
         self.response = response
-        self.response_body = response.json()
+        self.response_body = response.json() if response.text else None
         self.response_status = response.status_code
         self.response_headers = response.headers
 

@@ -5,17 +5,18 @@ import allure
 
 
 def attach_response(response):
-    allure.attach(json.dumps(response.request.body, indent=4),
-                  f"[REQUEST BODY] [{response.request.method}] {response.request.url}",
+    request = response.request
+    allure.attach(json.dumps(json.loads(request.body) if request.body else None, indent=4),
+                  f"[REQUEST BODY] [{request.method}] {request.url}",
                   allure.attachment_type.JSON)
-    allure.attach(json.dumps(response.request.headers.__dict__, indent=4),
-                  f"[REQUEST HEADERS] [{response.request.method}] {response.request.url}",
+    allure.attach(json.dumps(request.headers.__dict__, indent=4),
+                  f"[REQUEST HEADERS] [{request.method}] {request.url}",
                   allure.attachment_type.JSON)
-    allure.attach(json.dumps(response.json(), indent=4),
-                  f"[RESPONSE BODY] [{response.request.method}] [{response.status_code}] {response.request.url}",
+    allure.attach(json.dumps(response.json() if response.text else None, indent=4),
+                  f"[RESPONSE BODY] [{request.method}] [{response.status_code}] {request.url}",
                   allure.attachment_type.JSON)
     allure.attach(json.dumps(response.headers.__dict__, indent=4),
-                  f"[RESPONSE HEADERS] [{response.request.method}] [{response.status_code}] {response.request.url}",
+                  f"[RESPONSE HEADERS] [{request.method}] [{response.status_code}] {request.url}",
                   allure.attachment_type.JSON)
 
 
