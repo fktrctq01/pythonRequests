@@ -24,7 +24,7 @@ def resp(code, data):
 
 # TODO
 @blueprint.route('/api/order/create', methods=['POST'])
-def create():
+def create_order():
     if OrderValidator(request).validate_body(ORDER_SCHEMA):
         order = Order(request.json)
         return resp(200, {
@@ -41,7 +41,7 @@ def create():
 
 # TODO
 @blueprint.route('/api/order', methods=['GET', 'DELETE'])
-def delete():
+def get_and_delete_order():
     id = request.args.get("id")
     return resp(200, {
         'id': '1',
@@ -53,7 +53,7 @@ def delete():
 
 # TODO
 @blueprint.route('/api/order/clean')
-def clean():
+def clean_marketdata():
     return resp(200, {
         'message': 'Order book is clean.'
     })
@@ -61,7 +61,7 @@ def clean():
 
 # TODO
 @blueprint.route('/api/marketdata')
-def get_orderbook():
+def get_marketdata():
     return resp(200, {
         'asks': [],
         'bids': [],

@@ -12,9 +12,12 @@ class MessageValidator:
         self.response_status = response.status_code
         self.response_headers = response.headers
 
-    def validate_body(self, schema, message):
+    def validate_body(self, schema):
         validate(self.response_body, schema)
-        assert self.response_body["message"] == message, GlobalErrorMessages.WRONG_RESPONSE_MESSAGE.value
+        return self
+
+    def validate_message(self, message):
+        assert self.response_body["message"] == message, GlobalErrorMessages.WRONG_RESPONSE_VALUE_MESSAGE.value
         return self
 
     def validate_status_code(self, status_code):

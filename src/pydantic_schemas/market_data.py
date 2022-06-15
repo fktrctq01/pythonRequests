@@ -9,7 +9,7 @@ class MarketDataOrder(BaseModel):
     quantity: StrictStr
 
     @validator("price", "quantity")
-    def check_length_price(cls, v):
+    def check_length_attr(cls, v):
         reg_exs = r"^\d{1,4}$"
         if not re.search(reg_exs, v):
             raise ValueError("not match (integer/string, 10000 > id > 0)")

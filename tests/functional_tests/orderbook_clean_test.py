@@ -1,35 +1,18 @@
-import pytest
+# @Date   : 14.06.2022
+# @Author : Alexey Khmarskiy
+# @File   : orderbook_clean_test.py
 
-from src.request import sender
-from src.response.validator.message_validator import MessageValidator
-from src.json_schemas.message import MESSAGE_SCHEMA
-from src.entity.market_data import MarketData
+import allure
+
+from tests.steps.global_steps import step_check_response_body_and_status_code_for_clean_order_book
 
 
-def test_check_format_clean_order_book():
+@allure.feature("Тестирование работы сервиса биржевого стакана")
+@allure.story("Тестирование запроса очистки стакана")
+@allure.title("Валидация кода и тела ответа на запрос очистки стакана")
+@allure.severity('critical')
+def test_check_response_body_clean_order_book():
     """
-    Проверка формата ответа на запрос /api/order/clean
+    В тест-кейсе проверяем, что в ответ на запрос /api/order/clean приходит код 200 и что ответ соответствует требованиям
     """
-    response = sender.clean()
-    validator = MessageValidator(response)
-    validator.validate_status_code(200).validate_body(MESSAGE_SCHEMA, "Order book is clean.")
-
-
-@pytest.mark.skip("Test in development")
-def test_check_clean_order_book(create_order):
-    """
-    Проверка очистки стакана запросом /api/order/clean
-    """
-    market_data = MarketData(sender.get_marked_data().json())
-    if len(market_data.asks) + len(market_data.bids) > 2:
-        print("+++++++")
-    # print(response.json())
-    # print()
-    # print(market_data)
-    # print(response.json())
-    # if market_data.
-
-    # response = sender.clean()
-    # validator = MessageValidator(response)
-    # validator.validate_status_code(200).validate_body(MESSAGE_SCHEMA, "Order book is clean")
-
+    step_check_response_body_and_status_code_for_clean_order_book()

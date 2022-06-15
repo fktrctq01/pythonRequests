@@ -16,15 +16,15 @@ class Order:
                 .set_side(OrderType(json["side"]))
 
     def set_id(self, id=random.randrange(1, 10000)):
-        self.result['id'] = self.id = id
+        self.result['id'] = self.id = str(id)
         return self
 
     def set_price(self, price=random.randrange(1, 10000)):
-        self.result['price'] = self.price = price
+        self.result['price'] = self.price = str(price)
         return self
 
     def set_quantity(self, quantity=random.randrange(1, 10000)):
-        self.result['quantity'] = self.quantity = quantity
+        self.result['quantity'] = self.quantity = str(quantity)
         return self
 
     def set_side(self, side=random.choice(list(OrderType))):
@@ -40,4 +40,4 @@ class Order:
         return self.result
 
     def __str__(self):
-        return self.json()
+        return self.json().__str__()

@@ -5,11 +5,18 @@ import allure
 
 
 def attach_response(response):
-    allure.attach(f"[{response.request.method}] {response.request.url}", "request_method_and_url")
-    allure.attach(response.request.body.__str__(), "request_body")
-    allure.attach(response.request.headers.__str__(), "request_headers")
-    allure.attach(response.text, "response_body")
-    allure.attach(response.headers.__str__(), "response_header")
+    allure.attach(json.dumps(response.request.body, indent=4),
+                  f"[REQUEST BODY] [{response.request.method}] {response.request.url}",
+                  allure.attachment_type.JSON)
+    allure.attach(json.dumps(response.request.headers.__dict__, indent=4),
+                  f"[REQUEST HEADERS] [{response.request.method}] {response.request.url}",
+                  allure.attachment_type.JSON)
+    allure.attach(json.dumps(response.json(), indent=4),
+                  f"[RESPONSE BODY] [{response.request.method}] [{response.status_code}] {response.request.url}",
+                  allure.attachment_type.JSON)
+    allure.attach(json.dumps(response.headers.__dict__, indent=4),
+                  f"[RESPONSE HEADERS] [{response.request.method}] [{response.status_code}] {response.request.url}",
+                  allure.attachment_type.JSON)
 
 
 def get_order(id):
