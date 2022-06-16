@@ -15,20 +15,22 @@ def create_and_delete_rnd_order():
 
     return order
 
+
 @fixture
 def create_and_delete_buy_order():
     order = Order()
-    send_request_create_order(Order().set_side(OrderType.BUY))
+    send_request_create_order(order.set_side(OrderType.BUY))
     check_order(order)
     yield
     delete_order(order)
 
     return order
 
+
 @fixture
 def create_and_delete_sell_order():
     order = Order()
-    send_request_create_order(Order().set_side(OrderType.SELL))
+    send_request_create_order(order.set_side(OrderType.SELL))
     check_order(order)
     yield
     delete_order(order)

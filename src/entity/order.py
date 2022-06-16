@@ -10,30 +10,64 @@ class Order:
         if json is None:
             self.default()
         else:
-            self.set_id(json.get('id'))\
-                .set_price(json.get('price'))\
-                .set_quantity(json.get('quantity'))\
-                .set_side(OrderType(json["side"]))
+            self.id = json.get('id')
+            self.price = json.get('price')
+            self.quantity = json.get('quantity')
+            self.side = json.get('side')
 
-    def set_id(self, id=random.randrange(1, 10000)):
-        self.result['id'] = self.id = str(id)
+    @property
+    def id(self):
+        return self._id
+
+    @id.setter
+    def id(self, value):
+        self.result['id'] = self._id = str(value)
+
+    def set_id(self, value):
+        self.id = value
         return self
 
-    def set_price(self, price=random.randrange(1, 10000)):
-        self.result['price'] = self.price = str(price)
+    @property
+    def price(self):
+        return self._price
+
+    @price.setter
+    def price(self, value):
+        self.result['price'] = self._price = str(value)
+
+    def set_price(self, value):
+        self.price = value
         return self
 
-    def set_quantity(self, quantity=random.randrange(1, 10000)):
-        self.result['quantity'] = self.quantity = str(quantity)
+    @property
+    def quantity(self):
+        return self._quantity
+
+    @quantity.setter
+    def quantity(self, value):
+        self.result['quantity'] = self._quantity = str(value)
+
+    def set_quantity(self, value):
+        self.quantity = value
         return self
 
-    def set_side(self, side=random.choice(list(OrderType))):
-        self.side = side
-        self.result['side'] = side.value
+    @property
+    def side(self):
+        return self._side
+
+    @side.setter
+    def side(self, value):
+        self.result['side'] = self._side = value
+
+    def set_side(self, value):
+        self.side = value.value
         return self
 
     def default(self):
-        self.set_id().set_price().set_quantity().set_side()
+        self.set_id(random.randrange(1, 10000))\
+            .set_price(random.randrange(1, 10000))\
+            .set_quantity(random.randrange(1, 10000))\
+            .set_side(random.choice(list(OrderType)))
         return self
 
     def json(self):

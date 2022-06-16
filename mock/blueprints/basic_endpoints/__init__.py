@@ -4,65 +4,64 @@ import json
 from flask import Blueprint, request, Response
 
 from mock.validator.order_validator import OrderValidator
+from src.enums.order_type import OrderType
 from src.json_schemas.order import ORDER_SCHEMA
 from src.entity.order import Order
 
 
 blueprint = Blueprint('api', __name__, url_prefix='/mock')
 
+orders = {}
+
 
 def to_json(data):
     return json.dumps(data) + "\n"
 
 
-def resp(code, data):
-    return Response(
-        status=code,
-        mimetype="application/json",
-        response=to_json(data))
+def resp(code, data=None):
+    response = Response(status=code, mimetype="application/json")
+    if data is not None:
+        response.response = to_json(data)
+    return response
 
 
-# TODO
 @blueprint.route('/api/order/create', methods=['POST'])
 def create_order():
     if OrderValidator(request).validate_body(ORDER_SCHEMA):
         order = Order(request.json)
-        return resp(200, {
-            'id': '1',
-            'price': '500.5',
-            'quantity': '10',
-            'side': 'buy'
-        })
+        orders.update({order.id: order.json()})
+        return resp(200, order.json())
     else:
         return resp(400, {
             'message': 'Bad request'
         })
 
 
-# TODO
 @blueprint.route('/api/order', methods=['GET', 'DELETE'])
 def get_and_delete_order():
     id = request.args.get("id")
-    return resp(200, {
-        'id': '1',
-        'price': '500.5',
-        'quantity': '10',
-        'side': 'buy'
-    })
+    order = orders.get(id)
+    if order is not None:
+        if request.method == 'GET':
+            return resp(200, order)
+        else:
+            return resp(200, orders.pop(id))
+    else:
+        return resp(404)
 
 
-# TODO
 @blueprint.route('/api/order/clean')
 def clean_marketdata():
+    orders.clear()
     return resp(200, {
         'message': 'Order book is clean.'
     })
 
-
-# TODO
 @blueprint.route('/api/marketdata')
 def get_marketdata():
     return resp(200, {
-        'asks': [],
-        'bids': [],
+        'asks': list({'price': element['price'], 'quantity': element['quantity']} for element in orders.values()
+                     if OrderType(element["side"]) == OrderType.BUY),
+        'bids': list({'price': element['price'], 'quantity': element['quantity']} for element in orders.values()
+                     if OrderType(element["side"]) == OrderType.SELL),
     })

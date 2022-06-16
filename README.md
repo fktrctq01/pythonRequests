@@ -22,7 +22,7 @@ $ pip3 install allure-pytest
 ```
 ## 💡 For run mock:
 ```
-$ python3 mock/run.py
+$ python3 mock_run.py
 ```
 
 ## 🚀 For run autotests:

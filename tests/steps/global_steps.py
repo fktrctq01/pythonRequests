@@ -29,5 +29,4 @@ def check_order(order):
 
 @step('Удаляем созданную для теста заявку на бирже')
 def delete_order(order):
-    response_validator = OrderValidator(sender.delete_order(order.id))
-    response_validator.validate_status_code(404)
+    OrderValidator(sender.delete_order(order.id))
