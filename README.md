@@ -12,7 +12,7 @@ $ pip3 install requests
 $ pip3 install jsonschema
 $ pip3 install pydantic
 $ pip3 install Flask
-$ pip3 install flask-restplus
+$ pip3 install flask-restx
 
 ```
 - Install allure framework

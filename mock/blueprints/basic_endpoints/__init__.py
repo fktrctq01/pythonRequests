@@ -57,6 +57,7 @@ def clean_marketdata():
         'message': 'Order book is clean.'
     })
 
+
 @blueprint.route('/api/marketdata')
 def get_marketdata():
     return resp(200, {

@@ -17,9 +17,8 @@ class OrderValidator:
             return False
         return True
 
-
     def __str__(self):
         return f"""
-        Request body: {json.dumps(self.request_body, indent = 0)}
+        Request body: {json.dumps(self.request_body, indent=0)}
         Headers: {self.request_headers}.
         """
