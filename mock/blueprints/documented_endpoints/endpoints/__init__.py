@@ -1,7 +1,7 @@
-# blueprints/documented_endpoints/methods/__init__.py
+# blueprints/documented_endpoints/endpoints/__init__.py
 from flask_restx import Namespace, Resource, fields
 
-namespace = Namespace('methods', path='/')
+namespace = Namespace('endpoints', path='/')
 
 order_model = namespace.model('order', {
     'id': fields.String(
@@ -28,7 +28,7 @@ order_model = namespace.model('order', {
 
 
 @namespace.route('/api/order')
-class GetDelOrder(Resource):
+class GetAndDelOrder(Resource):
 
     @namespace.doc(responses={200: 'Success', 400: 'Bad Request', 404: 'Not found'})
     @namespace.param("id", required=True, type=str)
@@ -42,7 +42,7 @@ class GetDelOrder(Resource):
 
 
 @namespace.route('/api/order/clean')
-class Clean(Resource):
+class CleanOrder(Resource):
 
     @namespace.doc(responses={200: 'Success'})
     def get(self):
@@ -50,7 +50,7 @@ class Clean(Resource):
 
 
 @namespace.route('/api/marketdata')
-class MarketData(Resource):
+class GetMarketdata(Resource):
 
     @namespace.doc(responses={200: 'Success'})
     def get(self):
@@ -58,7 +58,7 @@ class MarketData(Resource):
 
 
 @namespace.route('/api/order/create')
-class Create(Resource):
+class CreateOrder(Resource):
 
     @namespace.expect(order_model, validate=True)
     @namespace.doc(responses={200: 'Success', 400: 'Bad Request', 404: 'Not found'})

@@ -3,7 +3,7 @@ import json
 
 from flask import Blueprint, request, Response
 
-from mock.validator.order_validator import OrderValidator
+from jsonschema import validate, ValidationError
 from src.enums.order_type import OrderType
 from src.json_schemas.order import ORDER_SCHEMA
 from src.entity.order import Order
@@ -27,11 +27,12 @@ def resp(code, data=None):
 
 @blueprint.route('/api/order/create', methods=['POST'])
 def create_order():
-    if OrderValidator(request).validate_body(ORDER_SCHEMA):
+    try:
+        validate(request.json, ORDER_SCHEMA)
         order = Order(request.json)
         orders.update({order.id: order.json()})
         return resp(200, order.json())
-    else:
+    except ValidationError:
         return resp(400, {
             'message': 'Bad request'
         })

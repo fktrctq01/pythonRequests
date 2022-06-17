@@ -11,4 +11,4 @@ class MarketDataOrder:
         return self.result
 
     def __str__(self):
-        return self.json()
+        return self.json().__str__()

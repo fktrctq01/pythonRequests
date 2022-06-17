@@ -1,7 +1,7 @@
 # blueprints/documented_endpoints/__init__.py
 from flask import Blueprint
 from flask_restx import Api
-from mock.blueprints.documented_endpoints.methods import namespace as orderbook_ns
+from mock.blueprints.documented_endpoints.endpoints import namespace as orderbook_ns
 
 
 blueprint = Blueprint('documented_api', __name__, url_prefix='/mock')
