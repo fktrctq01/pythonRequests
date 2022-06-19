@@ -13,6 +13,7 @@ $ pip3 install jsonschema
 $ pip3 install pydantic
 $ pip3 install Flask
 $ pip3 install flask-restx
+$ pip3 install allure-behave
 
 ```
 - Install allure framework
@@ -30,6 +31,11 @@ $ python3 mock_run.py
 $  pytest -s -v tests/{file_name}.py --alluredir=allure-results
 or
 $  pytest -s -v tests --alluredir=allure-results
+```
+
+## 🚀 For run BDD autotests:
+```
+$  behave -f allure_behave.formatter:AllureFormatter -o allure-results -f pretty tests/features
 ```
 
 ## 📊 For create report:
