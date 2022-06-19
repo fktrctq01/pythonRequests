@@ -8,7 +8,7 @@ blueprint = Blueprint('documented_api', __name__, url_prefix='/mock')
 
 api_extension = Api(
     blueprint,
-    title='Orderbook mock service',
+    title='OrderBook mock service',
     version='1.0',
     description='This service allows you to add orders to the order book, delete and view the order book'
 )

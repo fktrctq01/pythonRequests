@@ -7,7 +7,7 @@ from src.request import sender
 from src.response.validator.order_validator import OrderValidator
 from src.json_schemas.order import ORDER_SCHEMA
 from src.enums.order_type import OrderType
-from allure import feature, story, title, severity, step
+from allure import feature, story, title, severity
 from pytest import mark
 
 
@@ -19,6 +19,7 @@ from pytest import mark
     (1, 100, 10, OrderType.SELL),
     (2, 200, 20, OrderType.BUY)
 ])
+#TODO
 def test_check_response_body_clean_order_book(id, price, quantity, side):
     """
     В тест-кейсе проверяем, что запрос создания заказа обрабатыватся с различными входными параметрами

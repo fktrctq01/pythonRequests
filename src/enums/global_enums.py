@@ -9,3 +9,4 @@ class GlobalErrorMessages(Enum):
     WRONG_COUNT_ORDER_IN_RESPONSE = "The number of orders in the order book does not match the expected."
     WRONG_VALUE_ORDER_IN_RESPONSE = "The quantity or price of the order in the response is not as expected."
     EMPTY_ORDERBOOK = "Asks or bids in the order book is empty"
+    WRONG_BODY = "Error while checking for presence or absence of message body"

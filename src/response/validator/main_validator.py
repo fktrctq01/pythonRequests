@@ -1,5 +1,6 @@
 import json
 
+import requests
 from jsonschema import validate
 from src.enums.global_enums import GlobalErrorMessages
 
@@ -8,12 +9,19 @@ class MainValidator:
 
     def __init__(self, response):
         self.response = response
-        self.response_body = response.json() if response.text else None
+        try:
+            self.response_body = response.json()
+        except requests.exceptions.JSONDecodeError:
+            self.response_body = response.text
         self.response_status = response.status_code
         self.response_headers = response.headers
 
     def validate_body(self, schema):
         validate(self.response_body, schema)
+        return self
+
+    def is_empty_body(self, flag):
+        assert (len(str(self.response_body)) == 0) is flag, GlobalErrorMessages.WRONG_BODY.value
         return self
 
     def validate_status_code(self, status_code):
