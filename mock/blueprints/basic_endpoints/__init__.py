@@ -74,11 +74,21 @@ def clean_marketdata():
     })
 
 
+def take_price(element):
+    return int(element["price"])
+
+
 @blueprint.route('/api/marketdata')
 def get_marketdata():
+    asks = list({'price': element['price'], 'quantity': element['quantity']} for element in orders.values()
+                if OrderType(element["side"]) == OrderType.BUY)
+    asks.sort(reverse=True, key=take_price)
+
+    bids = list({'price': element['price'], 'quantity': element['quantity']} for element in orders.values()
+                if OrderType(element["side"]) == OrderType.SELL)
+    bids.sort(reverse=True, key=take_price)
+
     return resp(200, {
-        'asks': list({'price': element['price'], 'quantity': element['quantity']} for element in orders.values()
-                     if OrderType(element["side"]) == OrderType.BUY),
-        'bids': list({'price': element['price'], 'quantity': element['quantity']} for element in orders.values()
-                     if OrderType(element["side"]) == OrderType.SELL),
+        'asks': asks,
+        'bids': bids,
     })

@@ -3,8 +3,8 @@ from allure import step
 
 
 @step("Инициируем отправку запроса получения стакана заявок")
-def get_marketdata():
-    return sender.get_marked_data()
+def get_marketdata(method="GET"):
+    return sender.get_marked_data(method)
 
 
 @step("Проверяем, что в стакане заявок есть заявки на покупку и продажу")

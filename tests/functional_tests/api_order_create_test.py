@@ -130,7 +130,7 @@ def test_check_response_body_create_order_with_invalid_data(id, price, quantity,
 
 @feature("Тестирование работы сервиса биржевого стакана")
 @story("4. Тестирование запроса создания заявки")
-@title("4.05. Обработка ошибки, при создании заявки с некорректными входными данными")
+@title("4.05. Обработка запроса создания заявки с различными значениями в поле side")
 @severity('minor')
 @mark.functional
 @mark.parametrize("side,status_code", [
@@ -143,10 +143,13 @@ def test_check_response_body_create_order_with_invalid_data(id, price, quantity,
     param("test", 400, marks=mark.positive),
     param(None, 400, marks=mark.positive)
 ])
-def test_check_response_body_create_order_with_invalid_data2(side, status_code):
+def test_check_create_order_with_diff_side_value(side, status_code):
     """
     Предусловия: Нет
     Описание: В тест-кейсе проверяем, что запрос создания заказа обрабатыватся с различными входными параметрами
+    С заглушкой часть тестов падает, так как логика не предусмотрена. Предполагается, что сервис игнорирует регистр
+    значений в поле side. В требованиях явно не это не сказано, однако есть противоречия в запросе(Buy/Sell)
+    и в ответе (buy/sell)
     """
     body = Order().json()
     body["side"] = side

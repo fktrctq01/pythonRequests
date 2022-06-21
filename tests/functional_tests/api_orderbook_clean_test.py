@@ -45,7 +45,8 @@ def test_validate_response_clean_empty_orderbook():
 @mark.smoke
 @mark.functional
 @mark.positive
-def test_validate_response_clean_filled_orderbook(prepare_temporary_order_on_buy, prepare_temporary_order_on_sell):
+@mark.parametrize("count", [1])
+def test_validate_response_clean_filled_orderbook(prepare_temporary_orders):
     """
     Предусловия: Стакан заявок заполнен заявками на продажу и покупку
     Описание: В тест-кейсе проверяем, что в ответ на запрос /api/order/clean приходит код 200 и что ответ соответствует требованиям

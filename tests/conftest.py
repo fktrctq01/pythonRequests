@@ -6,6 +6,7 @@ from src.enums.order_type import OrderType
 from tests.steps.api_order_get_steps import get_order
 from tests.steps.api_order_create_steps import create_order
 from tests.steps.api_order_delete_steps import delete_order
+from tests.steps.api_orderbook_clean_steps import clean_orderbook
 
 
 @fixture
@@ -24,19 +25,21 @@ def prepare_temporary_order_by_params(id, price, quantity, side):
 
 
 @fixture
-def prepare_temporary_order_on_buy():
-    order = Order()
-    create_order(order.set_side(OrderType.BUY))
-    yield order
-    delete_order(order.id)
+def prepare_temporary_orders(count):
+    buy_orders = [Order().set_id(i).set_side(OrderType.BUY) for i in range(1, count + 1)]
+    sell_orders = [Order().set_id(i + count).set_side(OrderType.SELL) for i in range(1, count + 1)]
+    for i in range(count):
+        create_order(buy_orders[i])
+        create_order(sell_orders[i])
+    yield buy_orders, sell_orders
+    for i in range(count):
+        delete_order(buy_orders[i].id)
+        delete_order(sell_orders[i].id)
 
 
 @fixture
-def prepare_temporary_order_on_sell():
-    order = Order()
-    create_order(order.set_side(OrderType.SELL))
-    yield order
-    delete_order(order.id)
+def clean():
+    clean_orderbook()
 
 
 @fixture
