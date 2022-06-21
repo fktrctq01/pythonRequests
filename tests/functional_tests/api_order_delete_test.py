@@ -9,13 +9,13 @@ from allpairspy import AllPairs
 
 from src.enums.order_type import OrderType
 from src.response.validator.order_validator import OrderValidator
-from tests.steps.api_order_get_steps import get_order, check_body_data
+from tests.steps.api_order_get_steps import get_order
 from tests.steps.api_order_delete_steps import delete_order
-from tests.steps.common_steps import check_status_code, check_presence_a_message_body
+from tests.steps.common_steps import check_status_code, check_presence_a_message_body, check_body_data
 
 
 @feature("Тестирование работы сервиса биржевого стакана")
-@story("Тестирование запроса удаления заявки по id")
+@story("3. Тестирование запроса удаления заявки по id")
 @title("3.01. Валидация кода и тела ответа на запрос удаления заявки, которой нет")
 @severity('normal')
 @mark.functional
@@ -39,7 +39,7 @@ def test_validate_response_delete_order_by_unknown_id():
 
 
 @feature("Тестирование работы сервиса биржевого стакана")
-@story("Тестирование запроса удаления заявки по id")
+@story("3. Тестирование запроса удаления заявки по id")
 @title("3.02. Валидация кода и тела ответа на запрос удаления заявки, которая присутствует в стакане")
 @severity('critical')
 @mark.functional
@@ -67,12 +67,11 @@ def test_validate_response_delete_order_by_id(prepare_temporary_order_by_params)
         check_status_code(OrderValidator(response), 200)
         check_body_data(OrderValidator(response), order)
     with step(f"Проверяем, что заявка действительно удалена"):
-        response = get_order(order.id)
-        check_status_code(OrderValidator(response), 404)
+        check_status_code(OrderValidator(get_order(order.id)), 404)
 
 
 @feature("Тестирование работы сервиса биржевого стакана")
-@story("Тестирование запроса удаления заявки по id")
+@story("3. Тестирование запроса удаления заявки по id")
 @title("3.03. Обработка ошибки, при удалении заявки с некорректными входными данными")
 @severity('minor')
 @mark.functional
@@ -89,7 +88,7 @@ def test_validate_response_delete_order_by_invalid_id(id):
 
 
 @feature("Тестирование работы сервиса биржевого стакана")
-@story("Тестирование запроса удаления заявки по id")
+@story("3. Тестирование запроса удаления заявки по id")
 @title("3.04. Проверка обработки запроса с методом {method}")
 @severity('minor')
 @mark.security
@@ -98,5 +97,4 @@ def test_validate_response_delete_order_incorrect_method(method):
     """
     Описание: В тест-кейсе проверяем, что сервис отвечает ошибкой на запрос /api/order?id=*, если метод отличный от GET
     """
-    response = OrderValidator(delete_order("1", method))
-    check_status_code(response, 405)
+    check_status_code(OrderValidator(delete_order("1", method)), 405)

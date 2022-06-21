@@ -13,7 +13,7 @@ from tests.steps.api_marketdata_steps import get_marketdata, check_marketdata_is
 
 
 @feature("Тестирование работы сервиса биржевого стакана")
-@story("Тестирование запроса очистки стакана")
+@story("1. Тестирование запроса очистки стакана")
 @title("1.01. Валидация кода и тела ответа на запрос очистки стакана. Пустой стакан")
 @severity('normal')
 @mark.functional
@@ -25,14 +25,12 @@ def test_validate_response_clean_empty_orderbook():
     """
     try:
         with step("Получаем стакан заявок и проверяем, что он пуст"):
-            response = MarketDataValidator(get_marketdata())
-            check_marketdata_is_empty(response)
+            check_marketdata_is_empty(MarketDataValidator(get_marketdata()))
     except AssertionError:
         with step("Стакан не пуст. Выполняем запрос очистки стакана и валидируем ответ"):
             clean_orderbook()
         with step("Получаем стакан заявок и проверяем, что он пуст"):
-            response = MarketDataValidator(get_marketdata())
-            check_marketdata_is_empty(response)
+            check_marketdata_is_empty(MarketDataValidator(get_marketdata()))
 
     with step("Стакан пуст. Повторно выполняем запрос очистки стакана и валидируем ответ"):
         response = MessageValidator(clean_orderbook())
@@ -41,7 +39,7 @@ def test_validate_response_clean_empty_orderbook():
 
 
 @feature("Тестирование работы сервиса биржевого стакана")
-@story("Тестирование запроса очистки стакана")
+@story("1. Тестирование запроса очистки стакана")
 @title("1.02. Валидация кода и тела ответа на запрос очистки стакана. Наполненный стакан")
 @severity('critical')
 @mark.smoke
@@ -54,19 +52,17 @@ def test_validate_response_clean_filled_orderbook(prepare_temporary_order_on_buy
     Убеждаемся, что стакан действительно очистился
     """
     with step("Получаем стакан заявок и проверяем, что он не пуст"):
-        response = MarketDataValidator(get_marketdata())
-        check_marketdata_is_not_empty(response)
+        check_marketdata_is_not_empty(MarketDataValidator(get_marketdata()))
     with step("Выполняем запрос очистки стакана и валидируем ответ"):
         response = MessageValidator(clean_orderbook())
         check_status_code(response, 200)
         check_clean_message_value(response)
     with step("Получаем стакан заявок и проверяем, что он пуст"):
-        response = MarketDataValidator(get_marketdata())
-        check_marketdata_is_empty(response)
+        check_marketdata_is_empty(MarketDataValidator(get_marketdata()))
 
 
 @feature("Тестирование работы сервиса биржевого стакана")
-@story("Тестирование запроса очистки стакана")
+@story("1. Тестирование запроса очистки стакана")
 @title("1.03. Проверка обработки запроса с методом {method}")
 @severity('minor')
 @mark.security
@@ -75,5 +71,4 @@ def test_validate_response_clean_orderbook_incorrect_method(method):
     """
     Описание: В тест-кейсе проверяем, что сервис отвечает ошибкой на запрос /api/order/clean, если метод отличный от GET
     """
-    response = MessageValidator(clean_orderbook(method))
-    check_status_code(response, 405)
+    check_status_code(MessageValidator(clean_orderbook(method)), 405)

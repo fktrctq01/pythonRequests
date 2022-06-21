@@ -9,7 +9,6 @@ from src.enums.order_type import OrderType
 from src.json_schemas.order import ORDER_SCHEMA_RQ
 from src.entity.order import Order
 
-
 blueprint = Blueprint('api', __name__, url_prefix='/mock')
 
 orders = {}

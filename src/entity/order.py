@@ -64,9 +64,9 @@ class Order:
         return self
 
     def default(self):
-        self.set_id(random.randrange(1, 10000))\
-            .set_price(random.randrange(1, 10000))\
-            .set_quantity(random.randrange(1, 10000))\
+        self.set_id(random.randrange(1, 10000)) \
+            .set_price(random.randrange(1, 10000)) \
+            .set_quantity(random.randrange(1, 10000)) \
             .set_side(random.choice(list(OrderType)))
         return self
 

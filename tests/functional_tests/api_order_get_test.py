@@ -9,13 +9,13 @@ from allpairspy import AllPairs
 
 from src.enums.order_type import OrderType
 from src.response.validator.order_validator import OrderValidator
-from tests.steps.api_order_get_steps import get_order, check_body_data
+from tests.steps.api_order_get_steps import get_order
 from tests.steps.api_order_delete_steps import delete_order
-from tests.steps.common_steps import check_status_code, check_presence_a_message_body
+from tests.steps.common_steps import check_status_code, check_presence_a_message_body, check_body_data
 
 
 @feature("Тестирование работы сервиса биржевого стакана")
-@story("Тестирование запроса получения заявки по id")
+@story("2. Тестирование запроса получения заявки по id")
 @title("2.01. Валидация кода и тела ответа на запрос получения заказа, которого нет")
 @severity('normal')
 @mark.functional
@@ -32,7 +32,7 @@ def test_validate_response_get_order_by_unknown_id():
             check_status_code(OrderValidator(response), 404)
             check_presence_a_message_body(OrderValidator(response), False)
     except AssertionError:
-        with step(f"Так как найдет заказ с номером {id_rnd} - удаляем его"):
+        with step(f"Так как найдет заказ с номером {id_rnd}, то удаляем его"):
             delete_order(id_rnd)
         with step(f"Повторно проверяем, существует ли в биржевом стакане заявка с номером {id_rnd}"):
             response = get_order(id_rnd)
@@ -41,7 +41,7 @@ def test_validate_response_get_order_by_unknown_id():
 
 
 @feature("Тестирование работы сервиса биржевого стакана")
-@story("Тестирование запроса получения заявки по id")
+@story("2. Тестирование запроса получения заявки по id")
 @title("2.02. Валидация кода и тела ответа на запрос получения заказа, который есть в стакане")
 @severity('critical')
 @mark.functional
@@ -107,7 +107,7 @@ def test_validate_response_get_order_by_id(prepare_temporary_order_by_params):
 
 
 @feature("Тестирование работы сервиса биржевого стакана")
-@story("Тестирование запроса получения заявки по id")
+@story("2. Тестирование запроса получения заявки по id")
 @title("2.03. Обработка ошибки, при получении некорректных входных данных")
 @severity('minor')
 @mark.functional
@@ -124,7 +124,7 @@ def test_validate_response_get_order_by_invalid_id(id):
 
 
 @feature("Тестирование работы сервиса биржевого стакана")
-@story("Тестирование запроса получения заявки по id")
+@story("2. Тестирование запроса получения заявки по id")
 @title("2.04. Проверка обработки запроса с методом {method}")
 @severity('minor')
 @mark.security
@@ -133,5 +133,4 @@ def test_validate_response_get_order_incorrect_method(method):
     """
     Описание: В тест-кейсе проверяем, что сервис отвечает ошибкой на запрос /api/order?id=*, если метод отличный от GET
     """
-    response = OrderValidator(get_order("1", method))
-    check_status_code(response, 405)
+    check_status_code(OrderValidator(get_order("1", method)), 405)
