@@ -2,10 +2,11 @@
 import json
 
 from flask import Blueprint, request, Response
+from random import randint
 
 from jsonschema import validate, ValidationError
 from src.enums.order_type import OrderType
-from src.json_schemas.order import ORDER_SCHEMA
+from src.json_schemas.order import ORDER_SCHEMA_RQ
 from src.entity.order import Order
 
 
@@ -25,10 +26,22 @@ def resp(code, data=None):
     return response
 
 
+def is_valid_id(value):
+    try:
+        return True if 0 < int(value) < 10000 else False
+    except ValueError:
+        return False
+
+
 @blueprint.route('/api/order/create', methods=['POST'])
 def create_order():
+    if request.json.get("id", None) is None:
+        request.json["id"] = str(randint(1, 9999))
+    if request.json.get("price", None) is None:
+        request.json["price"] = str(randint(1, 9999))
+
     try:
-        validate(request.json, ORDER_SCHEMA)
+        validate(request.json, ORDER_SCHEMA_RQ)
         order = Order(request.json)
         orders.update({order.id: order.json()})
         return resp(200, order.json())
@@ -41,12 +54,15 @@ def create_order():
 @blueprint.route('/api/order', methods=['GET', 'DELETE'])
 def get_and_delete_order():
     id = request.args.get("id")
+
+    if not is_valid_id(id):
+        return resp(400)
+
     order = orders.get(id)
-    if order is not None:
-        if request.method == 'GET':
-            return resp(200, order)
-        else:
-            return resp(200, orders.pop(id))
+    if order is not None and request.method == 'GET':
+        return resp(200, order)
+    elif order is not None and request.method == 'DELETE':
+        return resp(200, orders.pop(id))
     else:
         return resp(404)
 

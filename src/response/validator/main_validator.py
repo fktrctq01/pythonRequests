@@ -20,8 +20,8 @@ class MainValidator:
         validate(self.response_body, schema)
         return self
 
-    def is_empty_body(self, flag):
-        assert (len(str(self.response_body)) == 0) is flag, GlobalErrorMessages.WRONG_BODY.value
+    def check_presence_a_message_body(self, flag):
+        assert (len(str(self.response_body)) != 0) is flag, GlobalErrorMessages.WRONG_BODY.value
         return self
 
     def validate_status_code(self, status_code):
@@ -33,8 +33,11 @@ class MainValidator:
         return self
 
     def __str__(self):
-        return f"""
-        Status code: {self.response_status}. 
-        Response body: {json.dumps(self.response_body, indent = 4)}
-        Headers: {json.dumps(self.response_headers.__dict__, indent = 4)}.
-        """
+        return json.dumps({
+            "code": self.response_status,
+            "body": self.response_body,
+            "headers": self.response_headers.__dict__
+        }, indent=4)
+
+    def __repr__(self):
+        return self.__str__()

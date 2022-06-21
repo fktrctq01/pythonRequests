@@ -1,14 +1,15 @@
 # @Date   : 14.06.2022
 # @Author : Alexey Khmarskiy
-# @File   : create_order_test.py
+# @File   : api_order_create_test.py
+
+from allure import feature, story, title, severity
+from pytest import mark
 
 from src.entity.order import Order
 from src.request import sender
 from src.response.validator.order_validator import OrderValidator
-from src.json_schemas.order import ORDER_SCHEMA
+from src.json_schemas.order import ORDER_SCHEMA_RS
 from src.enums.order_type import OrderType
-from allure import feature, story, title, severity
-from pytest import mark
 
 
 @feature("Тестирование работы сервиса биржевого стакана")
@@ -19,14 +20,13 @@ from pytest import mark
     (1, 100, 10, OrderType.SELL),
     (2, 200, 20, OrderType.BUY)
 ])
-#TODO
 def test_check_response_body_clean_order_book(id, price, quantity, side):
     """
     В тест-кейсе проверяем, что запрос создания заказа обрабатыватся с различными входными параметрами
     """
     order = Order().set_id(id).set_price(price).set_quantity(quantity).set_side(side).json()
     response_validator = OrderValidator(sender.create_order(order))
-    response_validator.validate_status_code(200).validate_body(ORDER_SCHEMA)\
+    response_validator.validate_status_code(200).validate_body(ORDER_SCHEMA_RS)\
         .validate_id(id)\
         .validate_price(price)\
         .validate_quantity(quantity)\

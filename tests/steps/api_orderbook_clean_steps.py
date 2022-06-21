@@ -2,14 +2,9 @@ from src.request import sender
 from allure import step
 
 
-@step("Инициируем отправку запроса /api/order/clean")
+@step("Инициируем отправку запроса очистки стакана")
 def clean_orderbook(method="GET"):
     return sender.clean(method)
-
-
-@step("Проверяем, что код ответа равен {code} на запрос очистки стакана")
-def check_clean_status_code(response, code):
-    return response.validate_status_code(code)
 
 
 @step("Проверяем, что текст сообщения соответствует требованиям")

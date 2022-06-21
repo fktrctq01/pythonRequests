@@ -21,7 +21,7 @@ class Order:
 
     @id.setter
     def id(self, value):
-        self.result['id'] = self._id = str(value)
+        self.result['id'] = self._id = str(value) if value is not None else None
 
     def set_id(self, value):
         self.id = value
@@ -33,7 +33,7 @@ class Order:
 
     @price.setter
     def price(self, value):
-        self.result['price'] = self._price = str(value)
+        self.result['price'] = self._price = str(value) if value is not None else None
 
     def set_price(self, value):
         self.price = value
@@ -53,7 +53,7 @@ class Order:
 
     @property
     def side(self):
-        return self._side
+        return OrderType(self._side)
 
     @side.setter
     def side(self, value):
@@ -74,4 +74,7 @@ class Order:
         return self.result
 
     def __str__(self):
-        return self.json().__str__()
+        return str(self.json())
+
+    def __repr__(self):
+        return str(self.json())

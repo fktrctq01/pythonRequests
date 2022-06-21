@@ -19,3 +19,10 @@ class OrderValidator(MainValidator):
     def validate_side(self, side):
         assert self.response_body["side"] == side.value, GlobalErrorMessages.WRONG_RESPONSE_VALUE.value
         return self
+
+    def validate_order(self, order):
+        self.validate_id(order.id)\
+            .validate_price(order.price)\
+            .validate_quantity(order.quantity)\
+            .validate_side(order.side)
+        return self

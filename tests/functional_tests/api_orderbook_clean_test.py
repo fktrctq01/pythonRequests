@@ -1,13 +1,14 @@
 # @Date   : 14.06.2022
 # @Author : Alexey Khmarskiy
-# @File   : orderbook_clean_test.py
+# @File   : api_orderbook_clean_test.py
 
 from allure import feature, story, title, severity, step
 from pytest import mark
 
 from src.response.validator.marketdata_validator import MarketDataValidator
 from src.response.validator.message_validator import MessageValidator
-from tests.steps.api_order_clean_steps import clean_orderbook, check_clean_status_code, check_clean_message_value
+from tests.steps.api_orderbook_clean_steps import clean_orderbook, check_clean_message_value
+from tests.steps.common_steps import check_status_code
 from tests.steps.api_marketdata_steps import get_marketdata, check_marketdata_is_not_empty, check_marketdata_is_empty
 
 
@@ -36,7 +37,7 @@ def test_validate_response_clean_empty_orderbook():
 
     with step("Стакан пуст. Повторно выполняем запрос очистки стакана и валидируем ответ"):
         response = MessageValidator(clean_orderbook())
-        check_clean_status_code(response, 200)
+        check_status_code(response, 200)
         check_clean_message_value(response)
 
 
@@ -46,7 +47,7 @@ def test_validate_response_clean_empty_orderbook():
 @severity('critical')
 @mark.functional
 @mark.positive
-def test_validate_response_clean_filled_orderbook(create_and_delete_buy_order, create_and_delete_sell_order):
+def test_validate_response_clean_filled_orderbook(prepare_temporary_order_on_buy, prepare_temporary_order_on_sell):
     """
     Предусловия: Стакан заявок заполнен заявками на продажу и покупку
     Описание: В тест-кейсе проверяем, что в ответ на запрос /api/order/clean приходит код 200 и что ответ соответствует требованиям
@@ -57,7 +58,7 @@ def test_validate_response_clean_filled_orderbook(create_and_delete_buy_order, c
         check_marketdata_is_not_empty(response)
     with step("Выполняем запрос очистки стакана и валидируем ответ"):
         response = MessageValidator(clean_orderbook())
-        check_clean_status_code(response, 200)
+        check_status_code(response, 200)
         check_clean_message_value(response)
     with step("Получаем стакан заявок и проверяем, что он пуст"):
         response = MarketDataValidator(get_marketdata())
@@ -74,7 +75,6 @@ def test_validate_response_clean_orderbook_incorrect_method(method):
     """
     Описание: В тест-кейсе проверяем, что сервис отвечает ошибкой на запрос /api/order/clean, если метод отличный от GET
     """
-    with step("Выполняем запрос очистки стакана и валидируем ответ"):
-        response = MessageValidator(clean_orderbook(method))
-        check_clean_status_code(response, 405)
+    response = MessageValidator(clean_orderbook(method))
+    check_status_code(response, 405)
 # 415

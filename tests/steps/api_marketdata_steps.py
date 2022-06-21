@@ -2,14 +2,9 @@ from src.request import sender
 from allure import step
 
 
-@step("Инициируем отправку запроса /api/marketdata")
+@step("Инициируем отправку запроса получения стакана заявок")
 def get_marketdata():
     return sender.get_marked_data()
-
-
-@step("Проверяем, что код ответа на запрос получения стакана заявок")
-def check_marketdata_status_code(response):
-    return response.validate_status_code(200)
 
 
 @step("Проверяем, что в стакане заявок есть заявки на покупку и продажу")

@@ -1,7 +1,7 @@
 from behave import *
 from src.request import sender
 from src.response.validator.order_validator import OrderValidator
-from src.json_schemas.order import ORDER_SCHEMA
+from src.json_schemas.order import ORDER_SCHEMA_RS
 from src.entity.order import Order, OrderType
 
 
@@ -20,7 +20,7 @@ def check_status_code(context, code):
 @then('проверяем, что в ответе тело сообщения с id={id}, price={price}, quantity={quantity} и side={side}')
 def check_body(context, id, price, quantity, side):
     response_validator = OrderValidator(context.response)
-    response_validator.validate_body(ORDER_SCHEMA) \
+    response_validator.validate_body(ORDER_SCHEMA_RS) \
         .validate_id(id)\
         .validate_price(price)\
         .validate_quantity(quantity)\
