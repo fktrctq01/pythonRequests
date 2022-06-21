@@ -15,7 +15,7 @@ from tests.steps.api_marketdata_steps import get_marketdata, check_marketdata_is
 @feature("Тестирование работы сервиса биржевого стакана")
 @story("Тестирование запроса очистки стакана")
 @title("1.01. Валидация кода и тела ответа на запрос очистки стакана. Пустой стакан")
-@severity('critical')
+@severity('normal')
 @mark.functional
 @mark.positive
 def test_validate_response_clean_empty_orderbook():

@@ -17,7 +17,7 @@ from tests.steps.common_steps import check_status_code, check_presence_a_message
 @feature("Тестирование работы сервиса биржевого стакана")
 @story("Тестирование запроса получения заявки по id")
 @title("2.01. Валидация кода и тела ответа на запрос получения заказа, которого нет")
-@severity('critical')
+@severity('normal')
 @mark.functional
 @mark.positive
 def test_validate_response_get_order_by_unknown_id():
@@ -43,7 +43,7 @@ def test_validate_response_get_order_by_unknown_id():
 @feature("Тестирование работы сервиса биржевого стакана")
 @story("Тестирование запроса получения заявки по id")
 @title("2.02. Валидация кода и тела ответа на запрос получения заказа, который есть в стакане")
-@severity('normal')
+@severity('critical')
 @mark.functional
 @mark.positive
 # -------All combinations-------
@@ -51,7 +51,7 @@ def test_validate_response_get_order_by_unknown_id():
 # @mark.parametrize("price", ["0.01", "1", "5000.5", "9999", "9999.99", None])
 # @mark.parametrize("quantity", ["1", "4000", "9999"])
 # @mark.parametrize("side", [OrderType.SELL, OrderType.BUY])
-# -------Pairwise variant manual-------
+# -------Pairwise manual-------
 # @mark.parametrize(
 #     "id,price,quantity,side", [
 #         param("5000", "1", "9999", OrderType.SELL, marks=mark.smoke),
@@ -86,7 +86,7 @@ def test_validate_response_get_order_by_unknown_id():
 #         ("5000", "9999.99", "1", OrderType.BUY)
 #     ]
 # )
-# -------Pairwise variant auto-------
+# -------Pairwise auto-------
 @mark.parametrize("id,price,quantity,side", [param("1", "100", "10", OrderType.SELL, marks=mark.smoke)] + [
     value_list for value_list in AllPairs([
         ["1", "5000", "9999", None],
