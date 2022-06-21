@@ -3,8 +3,9 @@
 # @File   : api_order_get_test.py
 
 from allure import feature, story, title, severity, step
-from pytest import mark
+from pytest import mark, param
 from random import randint
+from allpairspy import AllPairs
 
 from src.enums.order_type import OrderType
 from src.response.validator.order_validator import OrderValidator
@@ -14,7 +15,7 @@ from tests.steps.common_steps import check_status_code, check_presence_a_message
 
 
 @feature("Тестирование работы сервиса биржевого стакана")
-@story("Тестирование запроса получения заказа по id")
+@story("Тестирование запроса получения заявки по id")
 @title("2.01. Валидация кода и тела ответа на запрос получения заказа, которого нет")
 @severity('critical')
 @mark.functional
@@ -40,16 +41,60 @@ def test_validate_response_get_order_by_unknown_id():
 
 
 @feature("Тестирование работы сервиса биржевого стакана")
-@story("Тестирование запроса получения заказа по id")
+@story("Тестирование запроса получения заявки по id")
 @title("2.02. Валидация кода и тела ответа на запрос получения заказа, который есть в стакане")
-@severity('critical')
-@mark.smoke
+@severity('normal')
 @mark.functional
 @mark.positive
-@mark.parametrize("id", ["1", "5000", "9999", None])
-@mark.parametrize("price", ["0.01", "1", "5000.5", "9999", "9999.99", None])
-@mark.parametrize("quantity", ["1", "4000", "9999"])
-@mark.parametrize("side", [OrderType.SELL, OrderType.BUY])
+# -------All combinations-------
+# @mark.parametrize("id", ["1", "5000", "9999", None])
+# @mark.parametrize("price", ["0.01", "1", "5000.5", "9999", "9999.99", None])
+# @mark.parametrize("quantity", ["1", "4000", "9999"])
+# @mark.parametrize("side", [OrderType.SELL, OrderType.BUY])
+# -------Pairwise variant manual-------
+# @mark.parametrize(
+#     "id,price,quantity,side", [
+#         param("5000", "1", "9999", OrderType.SELL, marks=mark.smoke),
+#         ("5000", "5000.5", "1", OrderType.BUY),
+#         ("5000", "9999", "4000", OrderType.SELL),
+#         ("5000", "9999.99", "9999", OrderType.BUY),
+#         ("5000", None, "1", OrderType.SELL),
+#         ("5000", "0.01", "4000", OrderType.BUY),
+#         ("9999", "5000.5", "4000", OrderType.BUY),
+#         ("9999", "9999", "9999", OrderType.SELL),
+#         ("9999", "9999.99", "1", OrderType.BUY),
+#         ("9999", None, "4000", OrderType.SELL),
+#         ("9999", "0.01", "9999", OrderType.BUY),
+#         ("9999", "1", "1", OrderType.SELL),
+#         (None, "9999", "1", OrderType.SELL),
+#         (None, "9999.99", "4000", OrderType.BUY),
+#         (None, None, "9999", OrderType.SELL),
+#         (None, "0.01", "1", OrderType.BUY),
+#         (None, "1", "4000", OrderType.SELL),
+#         (None, "5000.5", "9999", OrderType.BUY),
+#         ("1", "9999.99", "9999", OrderType.BUY),
+#         ("1", None, "1", OrderType.SELL),
+#         ("1", "0.01", "4000", OrderType.BUY),
+#         ("1", "1", "9999", OrderType.SELL),
+#         ("1", "5000.5", "1", OrderType.BUY),
+#         ("1", "9999", "4000", OrderType.SELL),
+#         ("5000", None, "4000", OrderType.SELL),
+#         ("5000", "0.01", "9999", OrderType.BUY),
+#         ("5000", "1", "1", OrderType.SELL),
+#         ("5000", "5000.5", "4000", OrderType.BUY),
+#         ("5000", "9999", "9999", OrderType.SELL),
+#         ("5000", "9999.99", "1", OrderType.BUY)
+#     ]
+# )
+# -------Pairwise variant auto-------
+@mark.parametrize("id,price,quantity,side", [param("1", "100", "10", OrderType.SELL, marks=mark.smoke)] + [
+    value_list for value_list in AllPairs([
+        ["1", "5000", "9999", None],
+        ["0.01", "1", "5000.5", "9999", "9999.99", None],
+        ["1", "4000", "9999"],
+        [OrderType.SELL, OrderType.BUY]
+    ])
+])
 def test_validate_response_get_order_by_id(prepare_temporary_order_by_params):
     """
     Предусловия: В биржевом стакане присутсвует заявка с нужными параметрами
@@ -80,7 +125,7 @@ def test_validate_response_get_order_by_invalid_id(id):
 
 @feature("Тестирование работы сервиса биржевого стакана")
 @story("Тестирование запроса получения заявки по id")
-@title("2.04. Проверка обработки запроса с методами отличными от GET")
+@title("2.04. Проверка обработки запроса с методом {method}")
 @severity('minor')
 @mark.security
 @mark.parametrize("method", ["POST", "PUT"])

@@ -14,7 +14,7 @@ $ pip3 install pydantic
 $ pip3 install Flask
 $ pip3 install flask-restx
 $ pip3 install allure-behave
-
+$ pip3 install allpairspy
 ```
 - Install allure framework
 ```
@@ -36,6 +36,11 @@ $  pytest -s -v tests --alluredir=allure-results
 ## 🚀 For run BDD autotests:
 ```
 $  behave -f allure_behave.formatter:AllureFormatter -o allure-results -f pretty tests/features
+```
+
+## 🚀 For run smoke autotests:
+```
+$ pytest -s -v -m smoke
 ```
 
 ## 📊 For create report:

@@ -16,7 +16,6 @@ from tests.steps.api_marketdata_steps import get_marketdata, check_marketdata_is
 @story("Тестирование запроса очистки стакана")
 @title("1.01. Валидация кода и тела ответа на запрос очистки стакана. Пустой стакан")
 @severity('critical')
-@mark.smoke
 @mark.functional
 @mark.positive
 def test_validate_response_clean_empty_orderbook():
@@ -45,6 +44,7 @@ def test_validate_response_clean_empty_orderbook():
 @story("Тестирование запроса очистки стакана")
 @title("1.02. Валидация кода и тела ответа на запрос очистки стакана. Наполненный стакан")
 @severity('critical')
+@mark.smoke
 @mark.functional
 @mark.positive
 def test_validate_response_clean_filled_orderbook(prepare_temporary_order_on_buy, prepare_temporary_order_on_sell):
@@ -67,7 +67,7 @@ def test_validate_response_clean_filled_orderbook(prepare_temporary_order_on_buy
 
 @feature("Тестирование работы сервиса биржевого стакана")
 @story("Тестирование запроса очистки стакана")
-@title("1.03. Проверка обработки запроса с методами отличными от GET")
+@title("1.03. Проверка обработки запроса с методом {method}")
 @severity('minor')
 @mark.security
 @mark.parametrize("method", ["POST", "PUT", "DELETE"])
@@ -77,4 +77,3 @@ def test_validate_response_clean_orderbook_incorrect_method(method):
     """
     response = MessageValidator(clean_orderbook(method))
     check_status_code(response, 405)
-# 415
