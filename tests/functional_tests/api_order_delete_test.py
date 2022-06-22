@@ -11,7 +11,7 @@ from src.enums.order_type import OrderType
 from src.response.validator.order_validator import OrderValidator
 from tests.steps.api_order_get_steps import get_order
 from tests.steps.api_order_delete_steps import delete_order
-from tests.steps.common_steps import check_status_code, check_presence_a_message_body, check_body_data
+from tests.steps.common_steps import check_status_code, check_body_data, check_body_is_empty
 
 
 @feature("Тестирование работы сервиса биржевого стакана")
@@ -30,12 +30,12 @@ def test_validate_response_delete_order_by_unknown_id():
         with step(f"Пробуем удалить заявку с номером {id_rnd}"):
             response = delete_order(id_rnd)
             check_status_code(OrderValidator(response), 404)
-            check_presence_a_message_body(OrderValidator(response), False)
+            check_body_is_empty(OrderValidator(response))
     except AssertionError:
         with step(f"Так как существовала заявка с номером {id_rnd}, то повторно выполняем запрос на удаление"):
             response = delete_order(id_rnd)
             check_status_code(OrderValidator(response), 404)
-            check_presence_a_message_body(OrderValidator(response), False)
+            check_body_is_empty(OrderValidator(response))
 
 
 @feature("Тестирование работы сервиса биржевого стакана")
@@ -84,7 +84,7 @@ def test_validate_response_delete_order_by_invalid_id(id):
     """
     response = delete_order(id)
     check_status_code(OrderValidator(response), 400)
-    check_presence_a_message_body(OrderValidator(response), False)
+    check_body_is_empty(OrderValidator(response))
 
 
 @feature("Тестирование работы сервиса биржевого стакана")

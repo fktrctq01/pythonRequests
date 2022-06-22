@@ -11,18 +11,18 @@ from src.enums.order_type import OrderType
 from src.response.validator.order_validator import OrderValidator
 from tests.steps.api_order_get_steps import get_order
 from tests.steps.api_order_delete_steps import delete_order
-from tests.steps.common_steps import check_status_code, check_presence_a_message_body, check_body_data
+from tests.steps.common_steps import check_status_code, check_body_data, check_body_is_empty
 
 
 @feature("Тестирование работы сервиса биржевого стакана")
 @story("2. Тестирование запроса получения заявки по id")
-@title("2.01. Валидация кода и тела ответа на запрос получения заказа, которого нет")
+@title("2.01. Валидация кода и тела ответа на запрос получения заявки, которой нет")
 @severity('normal')
 @mark.functional
 @mark.positive
 def test_validate_response_get_order_by_unknown_id():
     """
-    Предусловия: В биржевом стакане не существует заказа, который мы пытаемся найти
+    Предусловия: В биржевом стакане не существует заявки, который мы пытаемся найти
     Описание: В тест-кейсе проверям, что в ответе на запрос /api/order?id=* по несуществущему id приходит код 404
     """
     id_rnd = randint(1, 9999)
@@ -30,19 +30,19 @@ def test_validate_response_get_order_by_unknown_id():
         with step(f"Проверяем, существует ли в биржевом стакане заявка с номером {id_rnd}"):
             response = get_order(id_rnd)
             check_status_code(OrderValidator(response), 404)
-            check_presence_a_message_body(OrderValidator(response), False)
+            check_body_is_empty(OrderValidator(response))
     except AssertionError:
-        with step(f"Так как найдет заказ с номером {id_rnd}, то удаляем его"):
+        with step(f"Так как найдет заявка с номером {id_rnd}, то удаляем его"):
             delete_order(id_rnd)
         with step(f"Повторно проверяем, существует ли в биржевом стакане заявка с номером {id_rnd}"):
             response = get_order(id_rnd)
             check_status_code(OrderValidator(response), 404)
-            check_presence_a_message_body(OrderValidator(response), False)
+            check_body_is_empty(OrderValidator(response))
 
 
 @feature("Тестирование работы сервиса биржевого стакана")
 @story("2. Тестирование запроса получения заявки по id")
-@title("2.02. Валидация кода и тела ответа на запрос получения заказа, который есть в стакане")
+@title("2.02. Валидация кода и тела ответа на запрос получения заявки, которая есть в стакане")
 @severity('critical')
 @mark.functional
 @mark.positive
@@ -120,7 +120,7 @@ def test_validate_response_get_order_by_invalid_id(id):
     """
     response = get_order(id)
     check_status_code(OrderValidator(response), 400)
-    check_presence_a_message_body(OrderValidator(response), False)
+    check_body_is_empty(OrderValidator(response))
 
 
 @feature("Тестирование работы сервиса биржевого стакана")

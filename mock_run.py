@@ -3,7 +3,6 @@ from flask import Flask, redirect
 from mock.blueprints.basic_endpoints import blueprint as basic_endpoint
 from mock.blueprints.documented_endpoints import blueprint as documented_endpoint
 
-
 app = Flask(__name__)
 
 app.register_blueprint(basic_endpoint)

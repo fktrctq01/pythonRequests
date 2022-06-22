@@ -1,4 +1,4 @@
-from src.enums.global_enums import GlobalErrorMessages
+from src.enums.error import Error
 from src.response.validator.main_validator import MainValidator
 
 
@@ -9,27 +9,27 @@ class MarketDataValidator(MainValidator):
         return self
 
     def check_count_asks(self, count):
-        assert len(self.response_body["asks"]) == count, GlobalErrorMessages.WRONG_COUNT_ORDER_IN_RESPONSE.value
+        assert len(self.response_body["asks"]) == count, Error.WRONG_COUNT_ORDER_IN_RESPONSE.value
         return self
 
     def check_count_bids(self, count):
-        assert len(self.response_body["bids"]) == count, GlobalErrorMessages.WRONG_COUNT_ORDER_IN_RESPONSE.value
+        assert len(self.response_body["bids"]) == count, Error.WRONG_COUNT_ORDER_IN_RESPONSE.value
         return self
 
     def check_asks_is_not_empty(self):
-        assert len(self.response_body["asks"]) > 0, GlobalErrorMessages.EMPTY_ORDERBOOK.value
+        assert len(self.response_body["asks"]) > 0, Error.EMPTY_ORDERBOOK.value
         return self
 
     def check_bids_is_not_empty(self):
-        assert len(self.response_body["bids"]) > 0, GlobalErrorMessages.EMPTY_ORDERBOOK.value
+        assert len(self.response_body["bids"]) > 0, Error.EMPTY_ORDERBOOK.value
         return self
 
     def check_availability_of_ask(self, price, quantity):
         asks = dict((order.get("price"), order.get("quantity")) for order in self.response_body["asks"])
-        assert True if asks.get(price) == quantity else False, GlobalErrorMessages.WRONG_VALUE_ORDER_IN_RESPONSE.value
+        assert asks.get(price) == quantity, Error.WRONG_VALUE_ORDER_IN_RESPONSE.value
         return self
 
     def check_availability_of_a_bid(self, price, quantity):
         bids = dict((order.get("price"), order.get("quantity")) for order in self.response_body["bids"])
-        assert True if bids.get(price) == quantity else False, GlobalErrorMessages.WRONG_VALUE_ORDER_IN_RESPONSE.value
+        assert bids.get(price) == quantity, Error.WRONG_VALUE_ORDER_IN_RESPONSE.value
         return self

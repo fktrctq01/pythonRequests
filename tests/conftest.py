@@ -28,10 +28,13 @@ def prepare_temporary_order_by_params(id, price, quantity, side):
 def prepare_temporary_orders(count):
     buy_orders = [Order().set_id(i).set_side(OrderType.BUY) for i in range(1, count + 1)]
     sell_orders = [Order().set_id(i + count).set_side(OrderType.SELL) for i in range(1, count + 1)]
+
     for i in range(count):
         create_order(buy_orders[i])
         create_order(sell_orders[i])
+
     yield buy_orders, sell_orders
+
     for i in range(count):
         delete_order(buy_orders[i].id)
         delete_order(sell_orders[i].id)
