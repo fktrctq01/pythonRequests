@@ -43,7 +43,7 @@ def test_validate_response_clean_empty_orderbook():
 @mark.smoke
 @mark.functional
 @mark.positive
-@mark.parametrize("count", [1])
+@mark.parametrize("count_buy,count_sell", [(1, 1)])
 def test_validate_response_clean_filled_orderbook(prepare_temporary_orders):
     """
     Предусловия: Стакан заявок заполнен заявками на продажу и покупку

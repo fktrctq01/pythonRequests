@@ -9,7 +9,9 @@ from src.entity.market_data import MarketData
 from src.response.validator.marketdata_validator import MarketDataValidator
 from src.response.validator.order_validator import OrderValidator
 from tests.steps.api_orderbook_clean_steps import clean_orderbook
-from tests.steps.api_marketdata_steps import get_marketdata, check_marketdata_is_empty
+from tests.steps.api_marketdata_steps import get_marketdata, check_marketdata_is_empty, \
+    check_marketdata_bids_is_empty, check_marketdata_asks_is_empty, check_availability_of_a_bid, \
+    check_availability_of_ask
 from tests.steps.common_steps import check_status_code
 
 
@@ -37,15 +39,42 @@ def test_check_response_body_empty_orderbook():
 @severity('critical')
 @mark.functional
 @mark.positive
-# TODO
-def test_check_response_body_not_empty_orderbook(clean):
+@mark.parametrize("count_buy,count_sell", [
+    (0, 0),
+    (0, 1),
+    (1, 0),
+    (1, 1),
+    (10, 5),
+    (3, 15)
+])
+def test_check_response_body_not_empty_orderbook(count_buy, count_sell, clean, prepare_temporary_orders):
     """
-    Предусловия: Нет
+    Предусловия: В стакане есть набор заявок на покупку и/или продажу
     Описание: В тест-кейсе проверяем, что запрос корректно обрабатывается при получении не пустого стакана.
     Также валидируем значения в заявках
     """
-    response = get_marketdata()
-    check_status_code(MarketDataValidator(response), 200)
+    # Получаем заявки на покупку и продажу, которые подготовили для выполнения теста
+    buy_orders, sell_orders = prepare_temporary_orders
+
+    # Получаем маркетдату и проверяем код ответа
+    response = MarketDataValidator(get_marketdata())
+    check_status_code(response, 200)
+
+    # Проверяем, что заявок на покупку ожидаемое количество(из предусловия)
+    if count_buy == 0:
+        check_marketdata_asks_is_empty(response)
+    else:
+        # Валидируем заявки на соответствие цены и количества
+        for i in range(count_buy):
+            check_availability_of_ask(response, buy_orders[i].price, buy_orders[i].quantity)
+
+    # Проверяем, что заявок на продажу ожидаемое количество(из предусловия)
+    if count_sell == 0:
+        check_marketdata_bids_is_empty(response)
+    else:
+        # Валидируем заявки на соответствие цены и количества
+        for i in range(count_sell):
+            check_availability_of_a_bid(response, sell_orders[i].price, sell_orders[i].quantity)
 
 
 @feature("Тестирование работы сервиса биржевого стакана")

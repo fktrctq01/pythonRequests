@@ -25,18 +25,20 @@ def prepare_temporary_order_by_params(id, price, quantity, side):
 
 
 @fixture
-def prepare_temporary_orders(count):
-    buy_orders = [Order().set_id(i).set_side(OrderType.BUY) for i in range(1, count + 1)]
-    sell_orders = [Order().set_id(i + count).set_side(OrderType.SELL) for i in range(1, count + 1)]
+def prepare_temporary_orders(count_buy, count_sell):
+    buy_orders = [Order().set_id(i).set_side(OrderType.BUY) for i in range(1, count_buy + 1)]
+    sell_orders = [Order().set_id(i + count_buy).set_side(OrderType.SELL) for i in range(1, count_sell + 1)]
 
-    for i in range(count):
+    for i in range(count_buy):
         create_order(buy_orders[i])
+    for i in range(count_sell):
         create_order(sell_orders[i])
 
     yield buy_orders, sell_orders
 
-    for i in range(count):
+    for i in range(count_buy):
         delete_order(buy_orders[i].id)
+    for i in range(count_sell):
         delete_order(sell_orders[i].id)
 
 
