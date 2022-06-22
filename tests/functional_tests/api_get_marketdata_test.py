@@ -83,8 +83,8 @@ def test_check_response_body_not_empty_orderbook(count_buy, count_sell, clean, p
 @severity('normal')
 @mark.functional
 @mark.positive
-@mark.parametrize("count", [10])
-def test_check_sorted_orderbook(count, clean, prepare_temporary_orders):
+@mark.parametrize("count_buy,count_sell", [(10, 10)])
+def test_check_sorted_orderbook(count_buy, count_sell, clean, prepare_temporary_orders):
     """
     Предусловия: Нет
     Описание: В тест-кейсе проверяем, что заявки на покупку и продажу сортируются по убыванию цены
@@ -96,8 +96,10 @@ def test_check_sorted_orderbook(count, clean, prepare_temporary_orders):
 
     response = MarketData(get_marketdata().json())
     with step('Проверяем, что применена сортировка от большей цены к меньшей'):
-        for i in range(count):
+        for i in range(count_buy):
             assert response.asks[i].price == buy_prices[i]
+    with step('Проверяем, что применена сортировка от большей цены к меньшей'):
+        for i in range(count_sell):
             assert response.bids[i].price == sell_prices[i]
 
 
