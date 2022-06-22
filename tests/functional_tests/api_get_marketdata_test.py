@@ -3,7 +3,7 @@
 # @File   : api_get_marketdata_test.py
 
 from allure import feature, story, title, severity, step
-from pytest import mark
+from pytest import mark, param
 
 from src.entity.market_data import MarketData
 from src.response.validator.marketdata_validator import MarketDataValidator
@@ -43,7 +43,7 @@ def test_check_response_body_empty_orderbook():
     (0, 0),
     (0, 1),
     (1, 0),
-    (1, 1),
+    param(1, 1, marks=mark.smoke),
     (10, 5),
     (3, 15)
 ])
