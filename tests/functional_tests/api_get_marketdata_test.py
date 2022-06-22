@@ -2,7 +2,7 @@
 # @Author : Alexey Khmarskiy
 # @File   : api_get_marketdata_test.py
 
-from allure import feature, story, title, severity
+from allure import feature, story, title, severity, step
 from pytest import mark
 
 from src.entity.market_data import MarketData
@@ -66,9 +66,10 @@ def test_check_sorted_orderbook(count, clean, prepare_temporary_orders):
     sell_prices.sort(reverse=True, key=int)
 
     response = MarketData(get_marketdata().json())
-    for i in range(count):
-        assert response.asks[i].price == buy_prices[i]
-        assert response.bids[i].price == sell_prices[i]
+    with step('Проверяем, что применена сортировка от большей цены к меньшей'):
+        for i in range(count):
+            assert response.asks[i].price == buy_prices[i]
+            assert response.bids[i].price == sell_prices[i]
 
 
 @feature("Тестирование работы сервиса биржевого стакана")

@@ -24,15 +24,13 @@ def test_validate_response_clean_empty_orderbook():
     Описание: В тест-кейсе проверяем, что в ответ на запрос /api/order/clean приходит код 200 и что ответ соответствует требованиям
     """
     try:
-        with step("Получаем стакан заявок и проверяем, что он пуст"):
-            check_marketdata_is_empty(MarketDataValidator(get_marketdata()))
+        check_marketdata_is_empty(MarketDataValidator(get_marketdata()))
     except AssertionError:
-        with step("Стакан не пуст. Выполняем запрос очистки стакана и валидируем ответ"):
+        with step("Стакан не пуст. Выполним запрос очистки стакана и повторно проверим стакан"):
             clean_orderbook()
-        with step("Получаем стакан заявок и проверяем, что он пуст"):
             check_marketdata_is_empty(MarketDataValidator(get_marketdata()))
 
-    with step("Стакан пуст. Повторно выполняем запрос очистки стакана и валидируем ответ"):
+    with step("Стакан пуст. Выполним запрос очистки стакана и валидируем ответ"):
         response = MessageValidator(clean_orderbook())
         check_status_code(response, 200)
         check_clean_message_value(response)
@@ -52,14 +50,12 @@ def test_validate_response_clean_filled_orderbook(prepare_temporary_orders):
     Описание: В тест-кейсе проверяем, что в ответ на запрос /api/order/clean приходит код 200 и что ответ соответствует требованиям
     Убеждаемся, что стакан действительно очистился
     """
-    with step("Получаем стакан заявок и проверяем, что он не пуст"):
-        check_marketdata_is_not_empty(MarketDataValidator(get_marketdata()))
+    check_marketdata_is_not_empty(MarketDataValidator(get_marketdata()))
     with step("Выполняем запрос очистки стакана и валидируем ответ"):
         response = MessageValidator(clean_orderbook())
         check_status_code(response, 200)
         check_clean_message_value(response)
-    with step("Получаем стакан заявок и проверяем, что он пуст"):
-        check_marketdata_is_empty(MarketDataValidator(get_marketdata()))
+    check_marketdata_is_empty(MarketDataValidator(get_marketdata()))
 
 
 @feature("Тестирование работы сервиса биржевого стакана")

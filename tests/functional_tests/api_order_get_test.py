@@ -32,7 +32,7 @@ def test_validate_response_get_order_by_unknown_id():
             check_status_code(OrderValidator(response), 404)
             check_body_is_empty(OrderValidator(response))
     except AssertionError:
-        with step(f"Так как найдет заявка с номером {id_rnd}, то удаляем его"):
+        with step(f"Так как найдет заявка с номером {id_rnd}, то удаляем ее"):
             delete_order(id_rnd)
         with step(f"Повторно проверяем, существует ли в биржевом стакане заявка с номером {id_rnd}"):
             response = get_order(id_rnd)

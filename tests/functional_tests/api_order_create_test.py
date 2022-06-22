@@ -134,14 +134,14 @@ def test_check_response_body_create_order_with_invalid_data(id, price, quantity,
 @severity('minor')
 @mark.functional
 @mark.parametrize("side,status_code", [
-    # param("Buy", 400, marks=mark.negative),
-    # param("BUY", 400, marks=mark.negative),
-    # param("Sell", 400, marks=mark.negative),
-    # param("SELL", 400, marks=mark.negative),
-    # param("test", 400, marks=mark.negative),
-    # param(None, 400, marks=mark.negative),
+    param("Buy", 400, marks=mark.negative),
+    param("BUY", 400, marks=mark.negative),
+    param("Sell", 400, marks=mark.negative),
+    param("SELL", 400, marks=mark.negative),
+    param("test", 400, marks=mark.negative),
+    param(None, 400, marks=mark.negative),
     param("buy", 200, marks=mark.positive),
-    # param("sell", 200, marks=mark.positive)
+    param("sell", 200, marks=mark.positive)
 ])
 def test_check_create_order_with_diff_side_value(side, status_code):
     """
@@ -153,9 +153,9 @@ def test_check_create_order_with_diff_side_value(side, status_code):
     body = Order().json()
     body["side"] = side
 
-    with step('Инициируем отправку запроса создания заявки на бирже'):
+    with step('Инициируем отправку запроса создания заявки на бирже и валидируем код ответа'):
         response_create_order = sender.create_order(body)
-    check_status_code(OrderValidator(response_create_order), status_code)
+        check_status_code(OrderValidator(response_create_order), status_code)
 
     if status_code == 200:
         with step('Проверяем, что в теле ответа корректно заполнено поле side'):
@@ -165,4 +165,5 @@ def test_check_create_order_with_diff_side_value(side, status_code):
         with step('Проверяем, что в теле ответа корректно заполнено поле side'):
             OrderValidator(response_get_order).validate_side(OrderType(str(side).lower()))
     else:
-        MessageValidator(response_create_order).validate_message("Bad request")
+        with step('Проверяем, что на невалидные входные параметры выдется корректный ответ'):
+            MessageValidator(response_create_order).validate_message("Bad request")
