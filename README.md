@@ -37,7 +37,17 @@ $ python3 mock_run.py
 ```
 $  pytest -s -v tests/{file_name}.py --alluredir=allure-results
 or
-$  pytest -s -v tests --alluredir=allure-results
+$  pytest
+```
+
+## 🚀 For parallels run autotests:
+
+Test cases are marked **@mark.not_parallel** if their parallel launch is not possible or **@mark.parallel** if it is
+possible. After running parallel tests, you need to run other tests in one thread
+
+```
+$ pytest -n 4 -m "parallel"
+$ pytest -m "not_parallel"
 ```
 
 ## 🚀 For run BDD autotests:

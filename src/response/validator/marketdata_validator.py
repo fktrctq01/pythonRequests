@@ -8,11 +8,11 @@ class MarketDataValidator(MainValidator):
         schema.parse_obj(self.response_body)
         return self
 
-    def check_count_asks(self, count):
+    def check_asks_count(self, count):
         assert len(self.response_body["asks"]) == count, Error.WRONG_COUNT_ORDER_IN_RESPONSE.value
         return self
 
-    def check_count_bids(self, count):
+    def check_bids_count(self, count):
         assert len(self.response_body["bids"]) == count, Error.WRONG_COUNT_ORDER_IN_RESPONSE.value
         return self
 

@@ -2,36 +2,37 @@ from src.request import sender
 from allure import step
 
 
-@step("Инициируем отправку запроса получения стакана заявок")
+@step("Инициируем отправку запроса получения биржевого стакана заявок")
 def get_marketdata(method="GET"):
     return sender.get_marked_data(method)
 
 
 @step("Проверяем, что в стакане заявок есть заявки на покупку и продажу")
 def check_marketdata_is_not_empty(response):
-    return response.check_asks_is_not_empty().check_bids_is_not_empty()
+    response.check_asks_is_not_empty().check_bids_is_not_empty()
 
 
-@step("Проверяем, что в стакане заявок есть заявка на покупку")
+@step("Валидируем данные о заявке на покупку в биржевом стакане")
 def check_availability_of_a_bid(response, price, quantity):
-    return response.check_availability_of_a_bid(price, quantity)
+    response.check_availability_of_a_bid(price, quantity)
 
 
-@step("Проверяем, что в стакане заявок есть заявка на продажу")
+@step("Валидируем данные о заявке на продажу в биржевом стакане")
 def check_availability_of_ask(response, price, quantity):
-    return response.check_availability_of_ask(price, quantity)
+    response.check_availability_of_ask(price, quantity)
 
 
-@step("Проверяем, что в стакане заявок нет заявок на покупку и продажу")
-def check_marketdata_is_empty(response):
-    return response.check_count_asks(0).check_count_bids(0)
+@step("Проверяем количество заявок на покупку и продажу в биржевом стакане заявок")
+def check_marketdata_bids_asks_count(response, bids_count, asks_count):
+    check_marketdata_bids_count(response, bids_count)
+    check_marketdata_asks_count(response, asks_count)
 
 
-@step("Проверяем, что в стакане заявок нет заявок на продажу")
-def check_marketdata_bids_is_empty(response):
-    return response.check_count_bids(0)
+@step("Проверяем количество заявок на продажу в биржевом стакане заявок")
+def check_marketdata_bids_count(response, count):
+    response.check_bids_count(count)
 
 
-@step("Проверяем, что в стакане заявок нет заявок на покупку")
-def check_marketdata_asks_is_empty(response):
-    return response.check_count_asks(0)
+@step("Проверяем количество заявок на покупку в биржевом стакане заявок")
+def check_marketdata_asks_count(response, count):
+    response.check_asks_count(count)

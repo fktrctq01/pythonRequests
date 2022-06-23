@@ -70,7 +70,7 @@ def clean_marketdata():
 
 
 def take_price(element):
-    return int(element["price"])
+    return float(element["price"])
 
 
 @blueprint.route('/api/marketdata')

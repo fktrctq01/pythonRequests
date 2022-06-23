@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from pytest import fixture
 
 from allure import step
@@ -10,7 +12,7 @@ from tests.steps.api_orderbook_clean_steps import clean_orderbook
 
 
 @fixture
-def prepare_temporary_rnd_order():
+def prepare_temporary_rnd_order(worker_id):
     order = Order()
     create_order(order)
     yield order
@@ -25,7 +27,7 @@ def prepare_temporary_order_by_params(id, price, quantity, side):
 
 
 @fixture
-def prepare_temporary_orders(count_buy, count_sell):
+def prepare_temporary_order_list(count_buy, count_sell):
     buy_orders = [Order().set_id(i).set_side(OrderType.BUY) for i in range(1, count_buy + 1)]
     sell_orders = [Order().set_id(i + count_buy).set_side(OrderType.SELL) for i in range(1, count_sell + 1)]
 
@@ -43,7 +45,7 @@ def prepare_temporary_orders(count_buy, count_sell):
 
 
 @fixture
-def clean():
+def clean_orderbook_ft():
     clean_orderbook()
 
 
@@ -52,3 +54,11 @@ def check_order_and_delete_if_found(id):
     with step("Если id известен, тогда ищем по нему заявку и удаляем ее"):
         if id is not None and get_order(id).status_code == 200:
             delete_order(id)
+
+# @fixture(scope='session', autouse=True)
+# def print_time():
+#     start = datetime.now()
+#     print(f"\n{'=' * 30}     TIME START     {'=' * 30}\n{start}\n{'=' * 80}\n")
+#     yield
+#     finish = datetime.now()
+#     print(f"\n\n{'=' * 30}     TIME FINISH    {'=' * 30}\n{finish} diff={finish - start}\n{'=' * 80}")
