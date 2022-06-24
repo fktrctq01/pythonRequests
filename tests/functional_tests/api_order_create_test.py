@@ -13,7 +13,7 @@ from src.response.validator.order_validator import OrderValidator
 from src.enums.order_type import OrderType
 from tests.steps.api_order_get_steps import get_order
 from tests.steps.api_order_create_steps import create_order
-from tests.steps.common_steps import check_status_code, check_body_data, check_body_is_not_empty
+from tests.steps.common_steps import check_status_code, check_body_data, check_body_is_not_empty, check_headers
 
 
 @feature("Тестирование работы сервиса биржевого стакана")
@@ -162,3 +162,19 @@ class TestApiCreateOrder:
         else:
             with step('Проверяем, что на невалидные входные параметры выдется корректный ответ'):
                 MessageValidator(response_create_order).validate_message("Bad request")
+
+    @title("06. Проверка заголовков в ответе на запрос удаления заявки")
+    @severity('minor')
+    @mark.functional
+    @mark.positive
+    @mark.parallel
+    @mark.parametrize("count_buy,count_sell", [(1, 1)])
+    def test_validate_response_headers(self, prepare_temporary_order_list):
+        """
+        Описание: В тест-кейсе проверяем, что в ответе на запрос /api/order/create приходят нужные заголовки
+        """
+        buy_orders, sell_orders = prepare_temporary_order_list
+        response = OrderValidator(create_order(buy_orders[0]))
+        check_headers(response, {'Connection': 'close', 'Content-Type': 'application/json'})
+        response = OrderValidator(create_order(sell_orders[0]))
+        check_headers(response, {'Connection': 'close', 'Content-Type': 'application/json'})

@@ -34,6 +34,11 @@ class MainValidator:
         assert self.response_headers.get(name) == value, Error.WRONG_RESPONSE_HEADERS_VALUE.value
         return self
 
+    def validate_headers(self, headers: dict):
+        result = set(headers).difference(set(self.response_headers))
+        assert not result, f'{Error.WRONG_RESPONSE_HEADERS_VALUE.value}: {result}'
+        return self
+
     def __str__(self):
         return json.dumps({
             "code": self.response_status,

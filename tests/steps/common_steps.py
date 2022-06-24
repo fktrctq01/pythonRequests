@@ -19,3 +19,8 @@ def check_body_is_not_empty(response):
 @step("Валидируем тело сообщения и данные о заявке на покупку или продажу")
 def check_body_data(response, expected_order):
     response.validate_order(expected_order)
+
+
+@step("Валидируем заголовки в ответе на запрос")
+def check_headers(response, expected_headers: dict):
+    response.validate_headers(expected_headers)

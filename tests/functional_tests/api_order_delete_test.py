@@ -11,7 +11,7 @@ from src.enums.order_type import OrderType
 from src.response.validator.order_validator import OrderValidator
 from tests.steps.api_order_get_steps import get_order
 from tests.steps.api_order_delete_steps import delete_order
-from tests.steps.common_steps import check_status_code, check_body_data, check_body_is_empty
+from tests.steps.common_steps import check_status_code, check_body_data, check_body_is_empty, check_headers
 
 
 @feature("Тестирование работы сервиса биржевого стакана")
@@ -96,3 +96,16 @@ class TestApiDeleteOrder:
         Описание: В тест-кейсе проверяем, что сервис отвечает ошибкой на запрос /api/order?id=*, если метод отличный от GET
         """
         check_status_code(OrderValidator(delete_order("1", method)), 405)
+
+    @title("05. Проверка заголовков в ответе на запрос удаления заявки")
+    @severity('minor')
+    @mark.functional
+    @mark.positive
+    @mark.parallel
+    def test_validate_response_headers(self, prepare_temporary_rnd_order):
+        """
+        Описание: В тест-кейсе проверяем, что в ответе на запрос /api/order?id=* приходят нужные заголовки
+        """
+        order = prepare_temporary_rnd_order
+        response = OrderValidator(delete_order(order.id))
+        check_headers(response, {'Connection': 'close', 'Content-Type': 'application/json'})

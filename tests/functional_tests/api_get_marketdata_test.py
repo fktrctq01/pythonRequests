@@ -11,7 +11,7 @@ from src.response.validator.order_validator import OrderValidator
 from tests.steps.api_orderbook_clean_steps import clean_orderbook
 from tests.steps.api_marketdata_steps import get_marketdata, check_marketdata_bids_asks_count, \
     check_marketdata_bids_count, check_marketdata_asks_count, check_availability_of_a_bid, check_availability_of_ask
-from tests.steps.common_steps import check_status_code
+from tests.steps.common_steps import check_status_code, check_headers
 
 
 @feature("Тестирование работы сервиса биржевого стакана")
@@ -107,3 +107,16 @@ class TestApiGetMarketdata:
         Описание: В тест-кейсе проверяем, что сервис отвечает ошибкой на запрос /api/marketdata, если метод отличный от GET
         """
         check_status_code(OrderValidator(get_marketdata(method)), 405)
+
+    @title("05. Проверка заголовков в ответе на запрос удаления заявки")
+    @severity('minor')
+    @mark.functional
+    @mark.positive
+    @mark.parallel
+    @mark.parametrize("count_buy,count_sell", [(0, 0), (1, 1)])
+    def test_validate_response_headers(self, prepare_temporary_order_list):
+        """
+        Описание: В тест-кейсе проверяем, что в ответе на запрос /api/marketdata приходят нужные заголовки
+        """
+        response = OrderValidator(get_marketdata())
+        check_headers(response, {'Connection': 'close', 'Content-Type': 'application/json'})

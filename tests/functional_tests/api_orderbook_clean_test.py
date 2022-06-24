@@ -8,7 +8,7 @@ from pytest import mark
 from src.response.validator.marketdata_validator import MarketDataValidator
 from src.response.validator.message_validator import MessageValidator
 from tests.steps.api_orderbook_clean_steps import clean_orderbook, check_clean_message_value
-from tests.steps.common_steps import check_status_code
+from tests.steps.common_steps import check_status_code, check_headers
 from tests.steps.api_marketdata_steps import get_marketdata, check_marketdata_is_not_empty, \
     check_marketdata_bids_asks_count
 
@@ -69,3 +69,16 @@ class TestApiOrderClean:
         Описание: В тест-кейсе проверяем, что сервис отвечает ошибкой на запрос /api/order/clean, если метод отличный от GET
         """
         check_status_code(MessageValidator(clean_orderbook(method)), 405)
+
+    @title("04. Проверка заголовков в ответа на запрос очистки стакана")
+    @severity('minor')
+    @mark.functional
+    @mark.positive
+    @mark.parallel
+    @mark.parametrize("count_buy,count_sell", [(0, 0), (1, 1)])
+    def test_validate_response_headers(self, prepare_temporary_order_list):
+        """
+        Описание: В тест-кейсе проверяем, что в ответе на запрос /api/order/clean приходят нужные заголовки
+        """
+        response = MessageValidator(clean_orderbook())
+        check_headers(response, {'Connection': 'close', 'Content-Type': 'application/json'})
